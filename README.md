@@ -7,7 +7,7 @@ python version: 3.6.5, tensorflow version: 1.13.1
 아직 코드가 완성되진 않았는데 예측값을 내야하는 상황이라 러프한 상태입니다. multi-task learning 단계는 아니고 2 inputs & 1 output인 상황입니다.
 
 
-*19-10-28 추가*
+# *19-10-28 추가*
 
  엑셀파일들 중 kpx 파일과 끝에 b가 붙은 파일들이 조금씩 수정되었습니다. kpx 파일에는 kpx sum 열이 추가되었고, b 파일들은 풍향을 rad로 변환한 뒤 cosθ+sinθ를 구하는 식과 년-월-일의 data 형식을 오직 일로만 표현하는 열이 추가되었습니다.
  
