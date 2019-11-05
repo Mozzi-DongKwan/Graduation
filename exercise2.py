@@ -134,7 +134,7 @@ sumkpxTest = sumkpxdata[int(train_size+val_size):, :]
 
 # Make shared-LSTM layer
 sharedLSTM1 = LSTM(72, input_shape=(seq_length, input_dimension), return_sequences=True)
-sharedLSTM2 = LSTM(128)
+sharedLSTM2 = LSTM(64)
 # Model 1
 inputLayer1 = Input(shape=(seq_length, input_dimension))
 sharedLSTM1Instance1 = sharedLSTM1(inputLayer1)
@@ -164,6 +164,7 @@ early_stopping = EarlyStopping(patience = 5)
 hist1 = model1.fit(wTrain, sumkpxTrain, epochs=100, batch_size = 2, validation_data = (wVal, sumkpxVal), callbacks=[early_stopping])
 hist = model.fit(wTrain, kpxTrain, epochs=100, batch_size = 2, validation_data = (wVal, kpxVal), callbacks=[early_stopping])
 
+# Training Score
 trainScore1 = model1.evaluate(wTrain, sumkpxTrain)
 print(trainScore1)
 model1.reset_states()
@@ -177,3 +178,21 @@ model.reset_states()
 testScore = model.evaluate(wTest, kpxTest)
 print(testScore)
 model.reset_states()
+
+# Make an excel file & Write result data
+winput = winput.reshape(-1, seq_length, input_dimension)
+yhat = model.predict(winput, verbose=0)
+yhat[yhat < 0] = 0
+
+yhat = yhat.reshape(-1,1)
+
+yhat = kpxscaler.inverse_transform(yhat)
+
+import xlrd, xlwt
+workbookw = xlwt.Workbook(encoding='utf-8')
+workbookw.default_style.font.height = 20 * 11
+worksheetw = workbookw.add_sheet('1')
+for row_num in range(744):
+    worksheetw.write(row_num, 0, float(yhat[row_num][0]))
+
+workbookw.save(r'C:\Users\user\Desktop\result.xls')
